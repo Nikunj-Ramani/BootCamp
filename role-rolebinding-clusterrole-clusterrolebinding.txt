@@ -1,0 +1,67 @@
+# RBAC resources
+
+# A ClusterRole|Role defines a set of permissions and where it is available, 
+# in the whole cluster or just a single Namespace.
+
+# A ClusterRoleBinding|RoleBinding connects a set of permissions with 
+# an account and defines where it is applied, in the whole cluster 
+# or just a single Namespace.
+
+# Because of this there are 4 different RBAC combinations and 3 valid ones:
+
+# Role + RoleBinding (available in single Namespace, applied in single Namespace)
+# ClusterRole + ClusterRoleBinding (available cluster-wide, applied cluster-wide)
+# ClusterRole + RoleBinding (available cluster-wide, applied in single Namespace)
+# Role + ClusterRoleBinding (NOT POSSIBLE: available in single Namespace, applied cluster-wide)
+
+# For easiness we will do 
+# alias k=kubectl
+# export do="--dry-run -o yaml"
+
+# To the problem
+
+# Create a new ServiceAccount sa-c1 in Namespace n1. 
+# Create a Role and RoleBinding, both named as rocket.
+# These should allow the new SA to only create Secrets 
+# and ConfigMaps in that Namespace. 
+
+# To the solution
+
+# We first create the ServiceAccount
+ 
+k -n project-hamster create sa sa-c1
+
+serviceaccount/sa-c1 created
+
+# Then for the Role:
+
+k -n n1 create role rocket --verb=create \
+  --resource=secret --resource=configmap
+
+# Now we bind the Role to the ServiceAccount:
+
+k -n n1 create rolebinding rocket --role rocket \
+  --serviceaccount n1:sa-c1
+
+# Create a new ServiceAccount sa-c2. 
+# Create a ClusterRole and ClusterRoleBinding, both named as space.
+# These should allow the new SA to only create pods
+# and deployments in that Namespace.
+
+# To the solution
+
+# We first create the ServiceAccount
+ 
+k -n project-hamster create sa sa-c2
+
+serviceaccount/sa-c2 created
+
+# Then for the ClusterRole :
+
+k -n n2 create clusterrole space --verb=create \
+  --resource=pod --resource=deployment
+
+# Now we bind the ClusterRole to the ServiceAccount:
+
+k -n n1 create clusterrolebinding space --clusterrole space \
+  --serviceaccount n2:sa-c2

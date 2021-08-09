@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0003
+spec:
+  capacity:
+    storage: 15Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+
+# Persistent Volume creation
+# with name pv0003; Storage 15Gi; accessModes ReadWriteOnce
+# storageClassName manual
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: manual
+
+# Persistent Volume Claim creation
+# with name name my-pv-claim; accessModes ReadWriteOnce
+# Storage requests 8Gi; storageClassName manual
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/data"
+        name: myvol
+  volumes:
+    - name: myvol
+      persistentVolumeClaim:
+        claimName: my-pv-claim
+
+# Pod creation within Persistent Volume Claim creation
+# with name name mypod; image nginx
+# volume name myvol; path mount on /var/data
