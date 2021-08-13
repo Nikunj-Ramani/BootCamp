@@ -1,0 +1,59 @@
+https://devopscube.com/install-configure-helm-kubernetes/
+
+on labs-play-with-k8s
+
+
+[node1 ~]$ history
+kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.5.0.0/16
+kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl get nodes
+alias k=kubectl
+kubectl get nodes
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+ls
+chmod +x get_helm.sh
+./get_helm.sh
+yum install openssl -y
+./get_helm.sh
+helm
+helm version
+kubectl get nodes
+helm repo add stable https://charts.helm.sh/stable
+helm repo list
+helm ls
+helm search list
+helm search list stable
+helm repo list stable
+helm repo list
+helm search repo stable
+helm repo list stable | grep -i stable/nginx
+helm pull stable/mysql
+ls
+helm repo list
+helm search repo stable
+helm install mysql stable/mysql
+kubectl get pods
+helm ls
+kubectl get pods
+kubectl describe pods mysql-54bbdd8f86-2sbxf
+helm pull stable/jenkins
+helm repo list
+helm ls
+ls
+tar -xvfz jenkins-2.5.4.tgz
+tar -xvf jenkins-2.5.4.tgz
+ls
+cd jenkins/
+ls
+heml install new-jenkins .
+pwd
+helm install new-jenkins .
+kubectl get pods
+cd ..
+pwd
+ls
